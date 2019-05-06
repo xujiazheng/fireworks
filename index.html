@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            background: #000;
+            color: #fff;
+        }
+        .tips {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-weight: 700;
+            text-shadow: #aaa 1px 2px;
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tips">点击任何地方看效果</div>
+
+    
+    <script src="https://cdn.bootcss.com/rxjs/6.5.1/rxjs.umd.js"></script>
+    <script src="index.js"></script>
+    <script>
+        const {fromEvent, interval} = rxjs;
+        const {map} = rxjs.operators;
+        const observable = fromEvent(document.documentElement, 'click');
+        const subscription = observable.pipe(
+            map((e) => ({
+                x: e.clientX,
+                y: e.clientY,
+            }))
+        );
+        const intervalHandle = (startPos) => {
+            MemAntInterval({
+                startPos,
+                interval: 16,
+            })
+            // const handle = MemAnt.get(startPos);
+            // const intervalSubscription = interval(16).subscribe((count) => {
+            //     handle.next(count);
+            //     if (handle.isDone()) {
+            //         handle.distory();
+            //         intervalSubscription.unsubscribe();
+            //     }
+            // });
+        };
+        subscription.subscribe(intervalHandle);
+
+        // interval(100).pipe(map(() => ({
+        //     x: 600,
+        //     y: 200,
+        // }))).subscribe(intervalHandle);
+    </script>
+</body>
+</html>
